@@ -9,11 +9,10 @@ from opencensus.ext.azure import metrics_exporter
 from dotenv import load_dotenv
 import os
 # init SQLAlchemy so we can use it later in our models
-load_dotenv()
+load_dotenv(override=True)
 db = SQLAlchemy()    
 app = Flask(__name__)
 middleware = FlaskMiddleware(app)
-logger = logging.getLogger(__name__)
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
@@ -24,17 +23,17 @@ login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
 
-env = str(os.getenv('CONNEXION_STRING'))
 
+logger = logging.getLogger(__name__)
 logger.addHandler(AzureLogHandler(
-    connection_string="InstrumentationKey="+ env)
+    connection_string="InstrumentationKey="+os.getenv('CONNECTION_STRING'))
 )
 logger.setLevel(logging.INFO)
 config_integration.trace_integrations(['sqlalchemy'])
 
 exporter = metrics_exporter.new_metrics_exporter(
     enable_standard_metrics=False,
-    connection_string="InstrumentationKey="+ env)
+    connection_string="InstrumentationKey="+os.getenv('CONNECTION_STRING'))
 
 from .models import User
 
