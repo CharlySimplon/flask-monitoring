@@ -9,7 +9,7 @@ from opencensus.ext.azure import metrics_exporter
 from dotenv import load_dotenv
 import os
 # init SQLAlchemy so we can use it later in our models
-load_dotenv(override=True)
+load_dotenv()
 db = SQLAlchemy()    
 app = Flask(__name__)
 middleware = FlaskMiddleware(app)

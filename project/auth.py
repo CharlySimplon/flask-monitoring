@@ -4,6 +4,7 @@ from .models import User
 from flask_login import current_user, login_user, login_required, logout_user
 from project import db, app
 import logging
+
 auth = Blueprint('auth', __name__)
 
 @auth.route('/login')
